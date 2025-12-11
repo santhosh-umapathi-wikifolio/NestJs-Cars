@@ -3,10 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
+import { TypeOrmModule } from './config/db.module';
+
+
 
 @Module({
-  imports: [UsersModule, ReportsModule],
+  imports: [UsersModule, ReportsModule, TypeOrmModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
