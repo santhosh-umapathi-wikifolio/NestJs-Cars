@@ -1,5 +1,5 @@
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { AfterInsert, AfterRemove, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -11,6 +11,21 @@ export class User {
 
     @Column()
     password: string;
+
+    @AfterInsert()
+    logInsert() {
+        console.log(`New User Created with id: ${this.id}, email: ${this.email}`);
+    }
+
+    @AfterUpdate()
+    logUpdate() {
+        console.log(`User Updated with id: ${this.id}, email: ${this.email}`);
+    }
+
+    @AfterRemove()
+    logRemove() {
+        console.log(`User Removed with id: ${this.id}, email: ${this.email}`);
+    }
 }
 
 export const UserEntity = TypeOrmModule.forFeature([User]);

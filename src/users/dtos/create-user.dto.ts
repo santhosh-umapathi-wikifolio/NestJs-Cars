@@ -1,4 +1,4 @@
-import { IsEmail, isEmail, IsStrongPassword, isStrongPassword } from "class-validator";
+import { IsEmail, IsStrongPassword } from "class-validator";
 
 
 export class CreateUserDto {
