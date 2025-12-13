@@ -1,14 +1,30 @@
-import { CallHandler, ExecutionContext, NestInterceptor } from "@nestjs/common";
+import { CallHandler, ExecutionContext, NestInterceptor, UseInterceptors } from "@nestjs/common";
+import { plainToInstance } from "class-transformer";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { UserDto } from "src/users/dtos/user.dto";
+import { User } from "src/users/users.entity";
+
+
+type TDto = typeof UserDto
+type TData = User
+
+//Custom Decorator
+export function Serialize(dto: TDto) {
+    //Uses Nest Decorator to bind the interceptor
+    return UseInterceptors(new SerializeInterceptor(dto))
+}
+
+//Request/Response Interceptor/Middleware
 export class SerializeInterceptor implements NestInterceptor {
+    constructor(private dto: TDto) { }
 
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
-        console.log('Request Interceptor')
-        console.log('context', context)
-        return next.handle().pipe(map((data: any) => {
-            console.log('Response Interceptor')
-            console.log('data', data)
+        // Request Interceptor -> Goes here
+
+        return next.handle().pipe(map((data: TData) => {
+            // Response Interceptor -> Goes here
+            return plainToInstance(this.dto, data, { excludeExtraneousValues: true });
         }));
     }
 }
