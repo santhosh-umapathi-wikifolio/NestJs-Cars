@@ -25,8 +25,7 @@ export class UsersService {
         if (!user) {
             throw new NotFoundException('User not found');
         }
-        const { id: _, ...updateAttrs } = attrs; // Exclude id
-        Object.assign(user, updateAttrs);
+        Object.assign(user, attrs);
         return this.usersRepository.save(user);
     }
 
