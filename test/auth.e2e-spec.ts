@@ -16,15 +16,36 @@ describe('Authentication (e2e)', () => {
     await app.init();
   });
 
-  it('/auth/signup', () => {
-    const testEmail = 'test222@test.com';
+  it('/auth/signup - should signup successfully', () => {
+    const testEmail = 'test@test.com';
     return request(app.getHttpServer())
       .post('/auth/signup')
-      .send({ email: testEmail, password: 'password' })
+      .send({ email: testEmail, password: 'Password11111@asdaPPPPasdasdawasd' })
       .expect(201).then((res) => {
         const { id, email } = res.body;
         expect(id).toBeDefined();
         expect(email).toBe(testEmail);
       });
   });
+
+  it('auth/signup - should return user correctly', async () => {
+    const testEmail = 'test2@test.com';
+    const res = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({ email: testEmail, password: 'Password11111@asdaPPPPasdasdawasd' })
+      .expect(201);
+
+    const { id, email } = res.body;
+    const cookie = res.get('Set-Cookie');
+
+    const userRes = await request(app.getHttpServer())
+      .get('/auth/whoami')
+      .set('Cookie', cookie as string[])
+      .expect(200);
+    const { email: whoamiEmail, id: whoamiId } = userRes.body;
+
+    expect(whoamiId).toBe(id);
+    expect(whoamiEmail).toBe(email);
+  });
+
 });
