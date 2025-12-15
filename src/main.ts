@@ -1,11 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+const CookieSession = require('cookie-session');
 
 const PORT = process.env.PORT || 4000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(
+    CookieSession({
+      keys: ['nestjs-cars-secret-key'],
+    }),
+  )
 
   app.useGlobalPipes(
     new ValidationPipe({
