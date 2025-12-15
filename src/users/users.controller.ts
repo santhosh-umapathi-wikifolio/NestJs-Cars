@@ -7,6 +7,7 @@ import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth/auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './users.entity';
+import { authGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -44,6 +45,7 @@ export class UsersController {
     }
 
     @Get('/:id')
+    @authGuard()
     findUser(@Param('id') id: string) {
         return this.usersService.findOne(+id);
     }
