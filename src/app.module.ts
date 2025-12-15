@@ -5,10 +5,16 @@ import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
 import { TypeOrmModule } from './config/db.module';
 import { APP_PIPE } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 const CookieSession = require('cookie-session');
 
 @Module({
-  imports: [UsersModule, ReportsModule, TypeOrmModule],
+  imports: [UsersModule, ReportsModule, TypeOrmModule,
+    // Global Configuration Module  
+    ConfigModule.forRoot({
+      isGlobal: true, // Make ConfigModule global
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`, // Load environment variables based on NODE_ENV
+    })],
   controllers: [AppController],
   providers: [AppService,
     // Global Validation Pipe
