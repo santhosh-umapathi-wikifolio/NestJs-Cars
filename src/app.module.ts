@@ -6,7 +6,7 @@ import { ReportsModule } from './reports/reports.module';
 import { TypeOrmModule } from './config/db.module';
 import { EnvConfigModule } from './config/config.imports';
 import { GlobalValidationPipe } from './config/config.providers';
-const CookieSession = require('cookie-session');
+import { CookieSessionMiddleware } from './middlewares/cookie-session.middleware';
 
 @Module({
   imports: [UsersModule, ReportsModule, TypeOrmModule, EnvConfigModule],
@@ -16,8 +16,6 @@ const CookieSession = require('cookie-session');
 export class AppModule {
   // Configure middleware for the entire application
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CookieSession({
-      keys: ['nestjs-cars-secret-key'],
-    })).forRoutes('*');
+    consumer.apply(CookieSessionMiddleware).forRoutes('*');
   }
 }
