@@ -1,12 +1,11 @@
 import { CallHandler, ExecutionContext, NestInterceptor, UseInterceptors } from "@nestjs/common";
-import { plainToInstance } from "class-transformer";
+import { ClassConstructor, plainToInstance } from "class-transformer";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { UserDto } from "src/users/dtos/user.dto";
 import { User } from "src/users/users.entity";
 
 
-type TDto = typeof UserDto
+type TDto = ClassConstructor<unknown>
 type TData = User
 
 //Custom Decorator
