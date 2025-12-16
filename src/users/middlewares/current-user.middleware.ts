@@ -1,6 +1,15 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
 import { UsersService } from "../users.service";
 import { NextFunction, Request, Response } from "express";
+import { User } from "../users.entity";
+
+declare global {
+    namespace Express {
+        interface Request {
+            currentUser?: User | null;
+        }
+    }
+}
 
 
 // Middleware to attach the current user to the request object based on session data
@@ -12,7 +21,6 @@ export class CurrentUserMiddleware implements NestMiddleware {
 
         if (userId) {
             const user = await this.userService.findOne(userId);
-            //@ts-ignore
             req.currentUser = user;
         }
 
