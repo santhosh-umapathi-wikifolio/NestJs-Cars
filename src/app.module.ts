@@ -1,32 +1,17 @@
-import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
 import { TypeOrmModule } from './config/db.module';
-import { APP_PIPE } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { EnvConfigModule } from './config/config.imports';
+import { GlobalValidationPipe } from './config/config.providers';
 const CookieSession = require('cookie-session');
 
 @Module({
-  imports: [UsersModule, ReportsModule, TypeOrmModule,
-    // Global Configuration Module  
-    ConfigModule.forRoot({
-      isGlobal: true, // Make ConfigModule global
-      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`, // Load environment variables based on NODE_ENV
-    })],
+  imports: [UsersModule, ReportsModule, TypeOrmModule, EnvConfigModule],
   controllers: [AppController],
-  providers: [AppService,
-    // Global Validation Pipe
-    {
-      provide: APP_PIPE,
-      useValue: new ValidationPipe({
-        whitelist: true, // Strip properties that do not have any decorators
-        transform: true, // Automatically transform payloads to be objects typed according to their DTO classes
-        // forbidNonWhitelisted: false, // Throw an error if non-whitelisted properties are present
-      }),
-    }
-  ],
+  providers: [AppService, GlobalValidationPipe],
 })
 export class AppModule {
   // Configure middleware for the entire application
