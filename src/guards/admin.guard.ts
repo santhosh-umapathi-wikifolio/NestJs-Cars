@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, UseGuards } from "@nestjs/common";
-import { User } from "src/users/users.entity";
+import { User } from "../users/users.entity";
 
 // Guard to check if the user is authorized based on role
 export class AdminGuard implements CanActivate {

@@ -10,7 +10,7 @@ import { CookieSessionMiddleware } from './middlewares/cookie-session.middleware
 import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, ReportsModule, TypeOrmModule, EnvConfigModule],
+  imports: [UsersModule, ReportsModule, EnvConfigModule, TypeOrmModule],
   controllers: [AppController],
   providers: [AppService, GlobalValidationPipe],
 })

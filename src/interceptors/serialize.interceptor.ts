@@ -2,7 +2,7 @@ import { CallHandler, ExecutionContext, NestInterceptor, UseInterceptors } from 
 import { ClassConstructor, plainToInstance } from "class-transformer";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { User } from "src/users/users.entity";
+import { User } from "../users/users.entity";
 
 
 type TDto = ClassConstructor<unknown>
