@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Report } from './reports.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/users.entity';
+import { GetEstimateDto } from './dtos/get-estimate.dto';
 
 @Injectable()
 export class ReportsService {
@@ -23,5 +24,23 @@ export class ReportsService {
         report.approved = approved;
 
         return this.reportsRepository.save(report);
+    }
+
+    async getEstimate({ make, model, year, mileage, latitude, longitude }: GetEstimateDto) {
+        const estimate = await this.reportsRepository.createQueryBuilder('report')
+            .select('AVG(price)', 'price')
+            .where('make = :make', { make })
+            .andWhere('model = :model', { model })
+            .andWhere('longitude - :longitude BETWEEN -5 AND 5', { longitude })
+            .andWhere('latitude - :latitude BETWEEN -5 AND 5', { latitude })
+            .andWhere('year - :year BETWEEN -3 AND 3', { year })
+            .andWhere('approved IS TRUE')
+            .orderBy('ABS(mileage - :mileage)', 'DESC')
+            .setParameters({ mileage })
+            .limit(3)
+            .getRawOne()
+
+
+        return estimate;
     }
 }
