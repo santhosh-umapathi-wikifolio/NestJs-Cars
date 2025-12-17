@@ -1,5 +1,5 @@
 const CookieSession = require('cookie-session');
 
-export const CookieSessionMiddleware = CookieSession({
-    keys: ['nestjs-cars-secret-key'],
+export const CookieSessionMiddleware = (COOKIE_KEY: string) => CookieSession({
+    keys: [COOKIE_KEY],
 });
