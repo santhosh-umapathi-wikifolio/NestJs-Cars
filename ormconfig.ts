@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import { url } from 'inspector';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 // Load environment-specific .env file
@@ -20,15 +21,19 @@ switch (process.env.NODE_ENV) {
 config({ path: envFile });
 
 const dbConfig: DataSourceOptions = {
-  type: 'sqlite',
+  type: (process.env.DB_TYPE as 'sqlite' | 'postgres'),
+  url: process.env.DATABASE_URL,
   database: process.env.DB_NAME || 'db.sqlite',
+  // ssl: {
+  //   rejectUnauthorized: false
+  // },
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: process.env.NODE_ENV === 'test', // Only use synchronize: true in testing/development
+  synchronize: false, // Only use synchronize: true in testing/development
 
   //Migration settings
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
-  migrationsRun: false,
+  migrationsRun: process.env.NODE_ENV !== 'development', // Automatically run migrations in production and test
   migrationsTransactionMode: 'all',
   logging: process.env.NODE_ENV !== 'production',
 };
