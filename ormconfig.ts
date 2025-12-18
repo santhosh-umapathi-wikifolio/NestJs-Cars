@@ -23,7 +23,7 @@ const dbConfig: DataSourceOptions = {
   type: 'sqlite',
   database: process.env.DB_NAME || 'db.sqlite',
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: process.env.NODE_ENV === 'test', // Only use synchronize: true in development
+  synchronize: process.env.NODE_ENV === 'test', // Only use synchronize: true in testing/development
 
   //Migration settings
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
